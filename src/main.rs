@@ -1,11 +1,12 @@
 use std::io;
-// TODO
-// variable to track player turn ✔️
-// function to get desired column to 'drop' piece from player ✔️
-// function to 'drop' piece into column if it is available
-// function to check win
-// function to change active player ✔️
-// game loop ✔️
+use std::{thread, time}; // debugging purposes
+                         // TODO
+                         // variable to track player turn ✔️
+                         // function to get desired column to 'drop' piece from player ✔️
+                         // function to 'drop' piece into column if it is available
+                         // function to check win
+                         // function to change active player ✔️
+                         // game loop ✔️
 
 #[allow(dead_code)]
 fn main() {
@@ -52,23 +53,33 @@ fn main() {
         }
     }
 
-    fn process_choice(choice: u8, board: &mut Vec<&str>) {
+    fn clear_screen() {
+        std::process::Command::new("clear").status().unwrap();
+    }
+
+    fn process_choice(choice: u8, board: &mut Vec<Vec<&str>>, player: &mut u8) {
+        println!("current player is: {}", player);
         println!("choice is: {}", choice);
     }
 
-    fn game_loop(board: &Vec<Vec<&str>>, current_player: &mut u8) {
+    fn game_loop(board: &mut Vec<Vec<&str>>, current_player: &mut u8) {
         let mut running = false;
+        clear_screen();
         welcome_message();
         loop {
-            print_board(board);
-            get_desired_choice(&current_player);
-            // process_choice(get_desired_choice());
+            print_board(&board);
+            process_choice(
+                get_desired_choice(&current_player),
+                board,
+                current_player, // current_player
+            );
+            thread::sleep(time::Duration::from_secs(4));
             // check_win();
-            // clear_screen();
+            clear_screen();
             change_player(current_player);
         }
     }
 
     ////////////// DRIVER SCRIPT //////////////
-    game_loop(&board, &mut current_player);
+    game_loop(&mut board, &mut current_player);
 }
