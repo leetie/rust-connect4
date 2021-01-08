@@ -1,39 +1,30 @@
 use std::io;
+// TODO
+// variable to track player turn ✔️
+// function to get desired column to 'drop' piece from player ✔️
+// function to 'drop' piece into column if it is available
+// function to check win
+// function to change active player ✔️
+// game loop ✔️
 
 #[allow(dead_code)]
 fn main() {
-    // initialize variable to track current player
+    ////////////// VARIABLE INITIALIZATION //////////////
     let mut current_player: u8 = 1;
-    // initialize 7X5 board of "O"s as game board
-    let mut board = vec![vec!["O"; 7]; 5];
-    for row in board.iter() {
-        // println!("row is {:?}", row);
-        for cell in row.iter() {
-            print!("  {}  ", cell);
-        }
-        print!("\n"); // add new line after every row
-    }
-    board[0][0] = "X";
-    // TODO
-    // variable to track player turn ✔️
-    // function to get desired column to 'drop' piece from player ✔️
-    // function to 'drop' piece into column if it is available
-    // function to check win
-    // function to change active player ✔️
+    let mut board = vec![vec!["O"; 7]; 5]; // 7X5
 
-    //     { #game loop stuff
-    //          change_player(current_player);
-    //     }
-    fn change_player(_current_player: u8) -> u8 {
-        if _current_player == 1 {
-            2
+    ////////////// USER FUNCTIONS //////////////
+    fn change_player(_current_player: &mut u8) {
+        if *_current_player == 1 {
+            *_current_player = 2
         } else {
-            1
+            *_current_player = 1
         }
     }
 
-    fn get_desired_choice() -> u8 {
+    fn get_desired_choice(player: &u8) -> u8 {
         loop {
+            println!("Player {}, please input column 0-6", player);
             let mut choice = String::new();
             io::stdin().read_line(&mut choice).expect("Please input");
             let _choice: u8 = match choice.trim().parse() {
@@ -46,4 +37,38 @@ fn main() {
             };
         }
     }
+
+    ////////////// GAME BOARD FUNCTIONS //////////////
+    fn welcome_message() {
+        println!("Welcome to Connect 4!");
+    }
+
+    fn print_board(board: &Vec<Vec<&str>>) {
+        for row in board.iter() {
+            for cell in row.iter() {
+                print!("  {}  ", cell);
+            }
+            print!("\n"); // add new line after every row
+        }
+    }
+
+    fn process_choice(choice: u8, board: &mut Vec<&str>) {
+        println!("choice is: {}", choice);
+    }
+
+    fn game_loop(board: &Vec<Vec<&str>>, current_player: &mut u8) {
+        let mut running = false;
+        welcome_message();
+        loop {
+            print_board(board);
+            get_desired_choice(&current_player);
+            // process_choice(get_desired_choice());
+            // check_win();
+            // clear_screen();
+            change_player(current_player);
+        }
+    }
+
+    ////////////// DRIVER SCRIPT //////////////
+    game_loop(&board, &mut current_player);
 }
