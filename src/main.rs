@@ -60,6 +60,10 @@ fn main() {
     fn process_choice(choice: u8, board: &mut Vec<Vec<&str>>, player: &mut u8) {
         println!("current player is: {}", player);
         println!("choice is: {}", choice);
+        // check top row to see if desired space is occupied
+        // if so, invalid move because column is filled
+        // if not, check next row down recursively until !empty space is found
+        // add piece in space board[i-1][j], where 'i' is row and 'j' is col
     }
 
     fn game_loop(board: &mut Vec<Vec<&str>>, current_player: &mut u8) {
