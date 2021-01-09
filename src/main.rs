@@ -3,7 +3,7 @@ use std::{thread, time}; // debugging purposes
                          // TODO
                          // variable to track player turn ✔️
                          // function to get desired column to 'drop' piece from player ✔️
-                         // function to 'drop' piece into column if it is available
+                         // function to 'drop' piece into column if it is available ✔️
                          // function to check win
                          // function to change active player ✔️
                          // game loop ✔️
@@ -58,12 +58,26 @@ fn main() {
     }
 
     fn process_choice(choice: u8, board: &mut Vec<Vec<&str>>, player: &mut u8) {
-        println!("current player is: {}", player);
-        println!("choice is: {}", choice);
-        // check top row to see if desired space is occupied
-        // if so, invalid move because column is filled
-        // if not, check next row down recursively until !empty space is found
-        // add piece in space board[i-1][j], where 'i' is row and 'j' is col
+        let choice: usize = choice as usize;
+        // get new choice and rerun function if column is filled
+        if board[0][choice] != "O" {
+            println!("That column is filled!");
+            thread::sleep(time::Duration::from_secs(2));
+            process_choice(get_desired_choice(player), board, player);
+            return;
+        }
+        for row in 0..board.len() {
+            // if on last row && empty, place piece
+            if row == 4 && board[row][choice] == "O" {
+                board[row][choice] = "X";
+                return;
+            } else if board[row][choice] != "O" {
+                // if the column isnt filled, place piece
+                // 1 row above existing piece
+                board[row - 1][choice] = "X";
+                return;
+            }
+        }
     }
 
     fn game_loop(board: &mut Vec<Vec<&str>>, current_player: &mut u8) {
@@ -72,12 +86,7 @@ fn main() {
         welcome_message();
         loop {
             print_board(&board);
-            process_choice(
-                get_desired_choice(&current_player),
-                board,
-                current_player, // current_player
-            );
-            thread::sleep(time::Duration::from_secs(4));
+            process_choice(get_desired_choice(&current_player), board, current_player);
             // check_win();
             clear_screen();
             change_player(current_player);
