@@ -11,8 +11,6 @@ mod player;
 
 #[allow(dead_code)]
 fn main() {
-    pub use crate::game::*;
-
     ////////////// VARIABLE INITIALIZATION //////////////
     let mut board = game::board::new();
     let mut current_player: u8 = 1;

@@ -1,14 +1,14 @@
 // Module for game functions
 
 pub mod board {
-  pub use crate::player::*;
+  use crate::player::*;
   use colored::*;
   use std::{thread, time};
   pub fn new() -> Vec<Vec<ColoredString>> {
     vec![vec!["O".black().on_green(); 7]; 5]
   }
 
-  pub fn print_board(board: &Vec<Vec<ColoredString>>) {
+  fn print_board(board: &Vec<Vec<ColoredString>>) {
     for row in board.iter() {
       for cell in row.iter() {
         print!(
@@ -23,17 +23,17 @@ pub mod board {
     println!(" 0  1  2  3  4  5  6");
   }
 
-  pub fn welcome_message() {
+  fn welcome_message() {
     println!("Welcome to Connect 4!");
     println!("Player 1 will be {}.", "red".red());
     println!("Player 2 will be {}.", "blue".blue());
   }
 
-  pub fn clear_screen() {
+  fn clear_screen() {
     std::process::Command::new("clear").status().unwrap();
   }
 
-  pub fn process_choice(choice: u8, board: &mut Vec<Vec<ColoredString>>, player: &mut u8) {
+  fn process_choice(choice: u8, board: &mut Vec<Vec<ColoredString>>, player: &mut u8) {
     let choice: usize = choice as usize;
     // get new choice and rerun function if column is filled
     if board[0][choice] != "O".black().on_green() {
