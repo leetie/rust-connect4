@@ -1,6 +1,6 @@
 use colored::*;
-use std::io;
 use std::{thread, time};
+mod player;
 // TODO
 // variable to track player turn ✔️
 // function to get desired column to 'drop' piece from player ✔️
@@ -12,38 +12,11 @@ use std::{thread, time};
 
 #[allow(dead_code)]
 fn main() {
+    use crate::player::*;
     ////////////// VARIABLE INITIALIZATION //////////////
     let mut current_player: u8 = 1;
     let mut board = vec![vec!["O".black().on_green(); 7]; 5]; // 7X5
-
-    ////////////// USER FUNCTIONS //////////////
-    fn change_player(_current_player: &mut u8) {
-        if *_current_player == 1 {
-            *_current_player = 2
-        } else {
-            *_current_player = 1
-        }
-    }
-
-    fn get_desired_choice(player: &u8) -> u8 {
-        loop {
-            println!("Player {}, please input column 0-6", player);
-            let mut choice = String::new();
-            io::stdin().read_line(&mut choice).expect("Please input");
-            let _choice: u8 = match choice.trim().parse() {
-                Ok(num) => match num {
-                    0..=6 => break num,
-                    _ => continue,
-                },
-                Err(_) => {
-                    println!("Please input a number");
-                    continue;
-                }
-            };
-        }
-    }
-
-    ////////////// GAME BOARD FUNCTIONS //////////////
+                                                              ////////////// GAME BOARD FUNCTIONS //////////////
     fn welcome_message() {
         println!("Welcome to Connect 4!");
         println!("Player 1 will be {}.", "red".red());
@@ -75,7 +48,7 @@ fn main() {
         if board[0][choice] != "O".black().on_green() {
             println!("That column is filled!");
             thread::sleep(time::Duration::from_secs(2));
-            process_choice(get_desired_choice(player), board, player);
+            process_choice(player::get_desired_choice(player), board, player);
             return;
         }
         for row in 0..board.len() {
@@ -106,10 +79,14 @@ fn main() {
         welcome_message();
         loop {
             print_board(&board);
-            process_choice(get_desired_choice(&current_player), board, current_player);
+            process_choice(
+                player::get_desired_choice(&current_player),
+                board,
+                current_player,
+            );
             // check_win();
             clear_screen();
-            change_player(current_player);
+            player::change_player(current_player);
         }
     }
 
